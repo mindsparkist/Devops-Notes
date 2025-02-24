@@ -1,6 +1,10 @@
 # Devops-Notes
 Devops-Notes
 
+The Github Repo that we are using - https://github.com/mindsparkist/ultimate-devops-project-demo
+
+The Ecommerse application we will build - https://opentelemetry.io/docs/demo/architecture/
+
 (Due to technical issues, the search service is temporarily unavailable.)
 
 **Microservices** are an architectural approach in software development where an application is structured as a collection of small, autonomous services, each focused on a specific business capability. Here's a detailed breakdown:
