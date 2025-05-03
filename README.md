@@ -130,3 +130,66 @@ In essence, microservices offer a modular, scalable architecture ideal for evolv
 
 ### **Summary**:
 gRPC is a **modern, efficient alternative to REST**, optimized for **performance** and **strong typing**. While REST remains better for public APIs and simple use cases, gRPC excels in **distributed systems** requiring speed, scalability, and advanced communication patterns.
+
+
+This image shows a **Modified Git-Flow branching strategy** with an **additional `staging` branch**, used for better release management and quality assurance. Here's a breakdown of each part of the diagram and what it represents:
+
+---
+
+### 🌱 Branch Descriptions
+
+| Branch                         | Purpose                                                                                                 |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| **Develop** (Yellow)           | In-sprint development. All new features and bug fixes start here.                                       |
+| **Feature / Bug Fix** (Yellow) | Temporary branches for specific work (features or bug fixes) created from `develop`.                    |
+| **Staging** (Green)            | Pre-release branch used for QA/testing. Merged from `develop` once a sprint is completed.               |
+| **Master** (Blue)              | Stable codebase for production releases. Each release is merged from `staging`.                         |
+| **Pilot** (Purple)             | Not actively used in this strategy (**marked as unused**). May represent test/pre-prod in some setups.  |
+| **Hotfix** (Red)               | Urgent production fixes. Created from `master`, then merged back to `master`, `staging`, and `develop`. |
+
+---
+
+### 🔁 Workflow Explained (From bottom to top)
+
+1. **Development phase (yellow):**
+
+   * Developers create **feature** or **bug fix** branches from `develop`.
+   * After completion, they merge back into `develop`.
+
+2. **Staging phase (green):**
+
+   * At sprint end, stable code from `develop` is merged into `staging`.
+   * QA/testing is done here.
+   * If issues are found, bug fix branches may still stem from `develop` and be merged into `staging`.
+
+3. **Release to production (blue):**
+
+   * After QA sign-off, code is merged from `staging` to `master` for production.
+   * Marked with **RELEASE₁, RELEASE₂**, etc.
+
+4. **Hotfixes (red):**
+
+   * If a production issue is found, a **hotfix branch** is created from `master`.
+   * Fix is done, tested, and merged back into:
+
+     * `master` (for immediate deployment)
+     * `staging` (to keep QA/testing branch up to date)
+     * `develop` (to ensure next sprint includes the fix)
+
+---
+
+### ⭐ Key Benefits of This Modified Strategy
+
+* **Staging branch** provides a clean separation between tested code and in-progress sprint work.
+* Prevents unstable `develop` code from going directly to production.
+* Allows **hotfixes** without disrupting sprint work.
+* **Pilot branch** is optional/not used in this model.
+
+---
+
+### 🧠 TL;DR
+
+This modified Git-Flow adds a **staging branch** to improve release testing and reduce production risk. It structures code promotion from in-progress → QA → production while supporting emergency hotfixes smoothly.
+
+Would you like a textual flowchart or diagram for better understanding?
+
