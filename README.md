@@ -1,195 +1,70 @@
-# Devops-Notes
-Devops-Notes
-
-The Github Repo that we are using - https://github.com/mindsparkist/ultimate-devops-project-demo
-
-The Ecommerse application we will build - https://opentelemetry.io/docs/demo/architecture/
-
-(Due to technical issues, the search service is temporarily unavailable.)
-
-**Microservices** are an architectural approach in software development where an application is structured as a collection of small, autonomous services, each focused on a specific business capability. Here's a detailed breakdown:
-
-### **Core Characteristics**:
-1. **Decentralized & Independent**:
-   - Each service is self-contained, with its own codebase, data storage, and dependencies.
-   - Teams can develop, deploy, and scale services independently (e.g., using tools like Docker/Kubernetes).
-
-2. **Business-Focused**:
-   - Services align with business domains (e.g., User Management, Order Processing, Payment Handling).
-
-3. **Communication**:
-   - Services interact via lightweight protocols (e.g., REST APIs, gRPC, or messaging systems like RabbitMQ/Kafka).
-   - Loose coupling ensures changes in one service don’t disrupt others.
-
-4. **Data Autonomy**:
-   - Each service manages its own database, avoiding direct data sharing. Data consistency is handled through patterns like eventual consistency or Saga patterns.
-
-### **Benefits**:
-- **Scalability**: Scale individual services based on demand (e.g., scaling a Product Catalog during peak sales).
-- **Resilience**: Failures are isolated (e.g., a Payment Service outage doesn’t crash the entire app).
-- **Flexibility**: Use different technologies per service (e.g., Python for ML, Java for backend).
-- **Faster Development**: Teams work in parallel, enabling rapid updates and CI/CD pipelines.
-
-### **Challenges**:
-- **Complexity**: Managing distributed systems (networking, latency, service discovery).
-- **Data Management**: Handling transactions across services and ensuring consistency.
-- **Operational Overhead**: Requires DevOps expertise, monitoring (e.g., Prometheus/Grafana), and logging (e.g., ELK Stack).
-
-### **vs. Monoliths & SOA**:
-- **Monoliths**: Single codebase with tight coupling; harder to scale/modify.
-- **SOA**: Larger, reusable services with centralized governance (e.g., SOAP), while microservices are granular and decentralized.
-
-### **Real-World Use**:
-- **Netflix**: Uses microservices for streaming, recommendations, and billing.
-- **Uber**: Separates ride-matching, payment, and notifications into independent services.
-
-### **When to Use**:
-- For large, complex applications requiring agility and scalability.
-- When teams need autonomy and rapid iteration.
-
-In essence, microservices offer a modular, scalable architecture ideal for evolving applications, but require robust infrastructure and practices to manage complexity.
-
-(Due to technical issues, the search service is temporarily unavailable.)
-
-**gRPC** (gRPC Remote Procedure Calls) is an open-source framework developed by Google for high-performance communication between services. It uses **HTTP/2** for transport and **Protocol Buffers (Protobuf)** as its interface definition language (IDL) and message format. Here's how it works and how it differs from traditional approaches like REST:
+Welcome to the world of DevOps! Think of the Linux File System as the "Source of Truth." In DevOps, you aren’t just using a computer; you’re managing environments. Understanding where files live and how to move them is the difference between a smooth deployment and a "Why is the server down?" 3 AM phone call.
 
 ---
 
-### **Key Features of gRPC**:
-1. **Protocol Buffers (Protobuf)**:
-   - Uses a binary, schema-driven format (defined in `.proto` files) to serialize structured data.
-   - Smaller payloads and faster serialization/deserialization compared to text-based formats like JSON/XML.
+## 1. The Prompt: `username@computer:~$`
+Before you type a single command, you need to know where you are. This string is your **bash prompt**.
 
-2. **HTTP/2**:
-   - Supports multiplexing (multiple requests/responses over a single connection), reducing latency.
-   - Enables server/client streaming (real-time bidirectional communication).
-   - Header compression reduces overhead.
-
-3. **Strongly Typed Contracts**:
-   - Services and message formats are strictly defined in `.proto` files, ensuring consistency between clients and servers.
-   - Code can be auto-generated for multiple languages (e.g., Go, Python, Java) from the `.proto` file.
-
-4. **Four Communication Types**:
-   - **Unary**: Traditional request-response (like REST).
-   - **Server Streaming**: Client sends one request, server sends multiple responses (e.g., live updates).
-   - **Client Streaming**: Client sends multiple requests, server sends one response (e.g., file upload).
-   - **Bidirectional Streaming**: Both client and server send multiple messages asynchronously (e.g., chat apps).
-
-5. **Built-in Features**:
-   - Authentication, load balancing, deadlines/timeouts, and error handling (via status codes).
+* **`username`**: Who you are (permissions depend on this).
+* **`@computer`**: The name of the server (critical when managing 50+ servers).
+* **`~` (The Tilde)**: This is shorthand for your **Home Directory**.
+* **`$`**: Means you are a standard user. If you see a **`#`**, you have **root** (admin) privileges—tread carefully!
 
 ---
 
-### **How gRPC Differs from REST/HTTP APIs**:
-| **Aspect**              | **gRPC**                                                                 | **REST/HTTP APIs**                                                  |
-|--------------------------|--------------------------------------------------------------------------|---------------------------------------------------------------------|
-| **Protocol**             | HTTP/2 (multiplexed, binary)                                             | HTTP/1.1 (text-based, stateless)                                    |
-| **Data Format**          | Binary (Protocol Buffers)                                                | Text-based (JSON/XML)                                               |
-| **Performance**          | Faster due to binary encoding, multiplexing, and reduced latency.        | Slower for large payloads (text parsing, no multiplexing).          |
-| **API Contracts**        | Strictly defined using `.proto` files (code generation enforces types).  | Loosely defined (OpenAPI/Swagger optional, no enforced types).      |
-| **Communication Patterns**| Supports streaming (client, server, bidirectional).                      | Primarily request-response (no built-in streaming).                 |
-| **Browser Support**      | Limited (requires gRPC-Web proxy).                                       | Universal (native browser support).                                 |
-| **Use Cases**            | Internal microservices, real-time systems, IoT, low-latency scenarios.   | Public-facing APIs, web/mobile clients, simplicity-focused systems. |
+## 2. Home Directories: A Comparison
+Every OS gives the user a "personal bubble" to store files.
+
+| OS | Default Home Path |
+| :--- | :--- |
+| **Linux (Ubuntu/RedHat)** | `/home/username` |
+| **macOS** | `/Users/username` |
+| **Windows** | `C:\Users\username` |
+
+**DevOps Note:** In Linux, the **root user** is special. Their home directory isn't in `/home`; it’s just `/root`.
 
 ---
 
-### **Example Workflow**:
-1. **Define a Service** (`.proto` file):
-   ```protobuf
-   service UserService {
-     rpc GetUser (UserRequest) returns (UserResponse) {}
-     rpc StreamNotifications (NotificationRequest) returns (stream Notification) {}
-   }
+## 3. The Linux Directory Hierarchy (FHS)
+Linux follows the **Filesystem Hierarchy Standard**. Everything starts at `/` (the root).
 
-   message UserRequest { string user_id = 1; }
-   message UserResponse { string name = 1; string email = 2; }
-   ```
 
-2. **Generate Code**:
-   - Protobuf compiler (`protoc`) generates client/server code in your language of choice.
 
-3. **Implement & Deploy**:
-   - Write server logic (e.g., in Go) and client code (e.g., in Python) using the generated stubs.
+* **`/bin` & `/sbin`**: Essential binaries (programs). `/sbin` is usually for system admin tools (like `fdisk`).
+* **`/lib`**: Shared library files that programs need to run (like `.dll` files in Windows).
+* **`/etc`**: **The most important folder for DevOps.** This is where configuration files live (Nginx config, Docker config, etc.).
+* **`/home`**: User folders (e.g., `/home/ram`, `/home/sam`).
+* **`/boot`**: Files needed to start the OS.
+* **`/dev`**: Hardware access points (everything in Linux is a file, even your hard drive).
+* **`/opt`**: Optional/add-on software (where large third-party apps often install).
+* **`/var`**: Variable data. **`/var/log`** is your best friend when debugging.
+* **`/tmp`**: Temporary files (often cleared on reboot).
+* **`/proc`**: A "virtual" filesystem containing info about running processes and system resources.
 
 ---
 
-### **When to Use gRPC**:
-- **Internal Microservices**: Ideal for high-throughput, low-latency communication between backend services.
-- **Polyglot Systems**: Teams using different languages (e.g., Go, Java, Python) benefit from auto-generated code.
-- **Real-Time Apps**: Chat, gaming, IoT, or live data streaming (thanks to bidirectional streaming).
-- **Performance-Critical Systems**: Where payload size and speed matter (e.g., financial systems).
+## 4. The "Survival" Command Set
+As a Junior DevOps Engineer, these should be in your muscle memory:
+
+### Navigation & Discovery
+* **`pwd`**: "Print Working Directory." (Where am I?)
+* **`ls`**: List files. Use `ls -la` to see hidden files and permissions.
+* **`cd`**: Change directory.
+    * `cd ..`: Move up one level.
+    * `cd ~`: Go straight home.
+
+### File Manipulation
+* **`mkdir`**: Create a folder.
+* **`touch`**: Create an empty file.
+* **`nano`**: A simple text editor. (Great for quick config edits).
+* **`cp`**: Copy files.
+    * `cp -R source/ destination/`: The **`-R`** stands for **Recursive**. Use this to copy entire folders.
+* **`mv`**: Move or **rename** a file.
+    * Example: `mv todo.txt /tmp/test` moves the file to the temp folder.
+* **`rm`**: Remove.
+    * **Warning:** `rm -rf` deletes recursively and forcefully. It doesn't ask "Are you sure?" Use with extreme caution.
 
 ---
 
-### **Challenges**:
-- **Browser Limitations**: Requires gRPC-Web for browser clients.
-- **Tooling Maturity**: Less ecosystem support than REST (e.g., debugging tools, caching).
-- **Binary Data**: Harder to debug without tools (vs. human-readable JSON).
-
----
-
-### **Summary**:
-gRPC is a **modern, efficient alternative to REST**, optimized for **performance** and **strong typing**. While REST remains better for public APIs and simple use cases, gRPC excels in **distributed systems** requiring speed, scalability, and advanced communication patterns.
-
-
-This image shows a **Modified Git-Flow branching strategy** with an **additional `staging` branch**, used for better release management and quality assurance. Here's a breakdown of each part of the diagram and what it represents:
-
----
-
-### 🌱 Branch Descriptions
-
-| Branch                         | Purpose                                                                                                 |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| **Develop** (Yellow)           | In-sprint development. All new features and bug fixes start here.                                       |
-| **Feature / Bug Fix** (Yellow) | Temporary branches for specific work (features or bug fixes) created from `develop`.                    |
-| **Staging** (Green)            | Pre-release branch used for QA/testing. Merged from `develop` once a sprint is completed.               |
-| **Master** (Blue)              | Stable codebase for production releases. Each release is merged from `staging`.                         |
-| **Pilot** (Purple)             | Not actively used in this strategy (**marked as unused**). May represent test/pre-prod in some setups.  |
-| **Hotfix** (Red)               | Urgent production fixes. Created from `master`, then merged back to `master`, `staging`, and `develop`. |
-
----
-
-### 🔁 Workflow Explained (From bottom to top)
-
-1. **Development phase (yellow):**
-
-   * Developers create **feature** or **bug fix** branches from `develop`.
-   * After completion, they merge back into `develop`.
-
-2. **Staging phase (green):**
-
-   * At sprint end, stable code from `develop` is merged into `staging`.
-   * QA/testing is done here.
-   * If issues are found, bug fix branches may still stem from `develop` and be merged into `staging`.
-
-3. **Release to production (blue):**
-
-   * After QA sign-off, code is merged from `staging` to `master` for production.
-   * Marked with **RELEASE₁, RELEASE₂**, etc.
-
-4. **Hotfixes (red):**
-
-   * If a production issue is found, a **hotfix branch** is created from `master`.
-   * Fix is done, tested, and merged back into:
-
-     * `master` (for immediate deployment)
-     * `staging` (to keep QA/testing branch up to date)
-     * `develop` (to ensure next sprint includes the fix)
-
----
-
-### ⭐ Key Benefits of This Modified Strategy
-
-* **Staging branch** provides a clean separation between tested code and in-progress sprint work.
-* Prevents unstable `develop` code from going directly to production.
-* Allows **hotfixes** without disrupting sprint work.
-* **Pilot branch** is optional/not used in this model.
-
----
-
-### 🧠 TL;DR
-
-This modified Git-Flow adds a **staging branch** to improve release testing and reduce production risk. It structures code promotion from in-progress → QA → production while supporting emergency hotfixes smoothly.
-
-Would you like a textual flowchart or diagram for better understanding?
-
+### Pro-Tip for your Journey
+In DevOps, we rarely do things manually twice. Once you master these commands, your next step is learning how to put them into a **Bash Script** to automate your work.
